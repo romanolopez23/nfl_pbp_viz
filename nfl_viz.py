@@ -14,7 +14,8 @@ import textwrap
 import nfl_data_py as nfl
 
 #import data
-pbp = nfl.import_pbp_data([2024])
+#pbp = nfl.import_pbp_data([2024])
+pbp = nfl.import_pbp_data([2024], downcast=True, cache=False, alt_path=None)
 #create df
 df = pd.DataFrame(pbp)
 
