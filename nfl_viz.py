@@ -1,3 +1,7 @@
+#pip install nfl_data_py
+#pip install plotly
+#pip install mplcursors
+
 import streamlit as st
 import pandas as pd
 import os
@@ -20,20 +24,38 @@ df['yardline_100'] = 120 - df['yardline_100'] - 10
 df['xreception'] = df['yardline_100'] + df['air_yards']
 # Calculate xend
 df['xend'] = df['yardline_100'] + df['air_yards'] + df['yards_after_catch']
+# Calculate xend_rush
+df['xend_rush'] = df['yardline_100'] + df['rushing_yards']
+
 
 #filter and show data
-df = df[(df['play_type'] == 'pass') & (df['touchdown'] == 1.0)]
-
+df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchdown'] == 1.0)]
 
 #streamlit filters
+play_type = df['play_type'].drop_duplicates()
+play_type_choice = st.sidebar.selectbox(
+    'Choose Play Type:', options=play_type)
+df = df[(df['play_type'] == play_type_choice)]
 
-passer = df['passer'].drop_duplicates()
-passer_choice = st.sidebar.selectbox(
-    'Choose Passer:', options=passer)
-df = df[(df['passer'] == passer_choice)]
+team = df['posteam'].drop_duplicates()
+team_choice = st.sidebar.selectbox(
+    'Choose Team:', options=team)
+df = df[(df['posteam'] == team_choice)]
+
+if play_type_choice == 'run':
+    rusher = df['rusher'].drop_duplicates()
+    rusher_choice = st.sidebar.selectbox(
+        'Choose Rusher:', options=rusher)
+    df = df[(df['rusher'] == rusher_choice)]
+    currentplayer = rusher_choice
+elif play_type_choice == 'pass':
+    passer = df['passer'].drop_duplicates()
+    passer_choice = st.sidebar.selectbox(
+        'Choose Passer:', options=passer)
+    df = df[(df['passer'] == passer_choice)]
+    currentplayer = passer_choice
 
 pd.set_option('display.max_columns', None)
-df
 
 
 Game_ID = df['game_id'].drop_duplicates()
@@ -48,11 +70,10 @@ df = df[(df['play_id'] == play_id_choice)]
 
 
 
-df = df[['game_id', 'play_id', 'home_team', 'away_team', 'game_date', \
-        'receiver', 'passer', 'ydstogo', 'down', 'posteam', 'yardline_100', \
+df = df[['game_id', 'play_id', 'play_type', 'home_team', 'away_team', 'game_date', \
+        'receiver', 'rusher' ,'passer', 'ydstogo', 'down', 'posteam', 'yardline_100', \
         'xreception', 'xend', 'desc', 'yards_gained', 'air_yards', 'yards_after_catch',\
-            ]]
-df
+        'xend_rush']]
 
 # Assign variables
 home_team = df['home_team'].iloc[0]
@@ -62,6 +83,9 @@ desc = df['desc'].iloc[0]
 receiver = df['receiver'].iloc[0]
 ydstogo = df['ydstogo'].iloc[0]
 down = df['down'].iloc[0]
+xend = df['xend'].iloc[0]
+xreception = df['xreception'].iloc[0]
+yards_after_catch = df['yards_after_catch'].iloc[0]
 
 
 def create_football_field(linenumbers=True,
@@ -73,10 +97,8 @@ def create_football_field(linenumbers=True,
                           highlighted_name='Line of Scrimmage',
                           fifty_is_los=False,
                           figsize=(12, 6.33)):
-    """
-    Function that plots the football field for viewing plays.
-    Allows for showing or hiding endzones.
-    """
+
+
     rect = patches.Rectangle((0, 0), 120, 53.3, linewidth=0.1,
                              edgecolor='r', facecolor='darkgreen', zorder=0)
 
@@ -89,10 +111,6 @@ def create_football_field(linenumbers=True,
               53.3, 0, 0, 53.3, 53.3, 0, 0, 53.3, 53.3, 53.3, 0, 0, 53.3],
              color='white')
 
-    if fifty_is_los:
-        plt.plot([60, 60], [0, 53.3], color='gold')
-        plt.text(62, 50, '<- Player Yardline at Snap', color='gold')
-        
     # Endzones
     if endzones:
         ez1 = patches.Rectangle((0, 0), 10, 53.3,
@@ -141,7 +159,7 @@ def create_football_field(linenumbers=True,
 
     if highlight_line:
         hl = highlight_line_number
-        plt.plot([hl, hl], [0, 53.3], color='yellow')
+        plt.plot([hl, hl], [0, 53.3], color='red')
         
     if highlight_first_down_line:
         fl = hl + yards_to_go
@@ -165,37 +183,65 @@ fig, ax = create_football_field(
 )
 
 # Create the scatter plot for xpass
-for team in df['posteam'].unique():
-    team_data = df[df['posteam'] == team]
-    plt.scatter(team_data['yardline_100'], np.full(len(team_data), 26.65), label=f"{team} yardline_100", marker='o', s=200)
+plt.scatter(team_data['yardline_100'], np.full(len(team_data), 26.65), label=f"{team} yardline_100", marker='o', s=200)
 
-# Create the scatter plot for air_yards
-plt.scatter(team_data['xreception'], np.full(len(team_data), 26.65), label=f"{team} xreception", marker='x', s=200)
+# Create the scatter plot for xreception
+if play_type_choice == 'pass':
+    plt.scatter(team_data['xreception'], np.full(len(team_data), 26.65), label=f"{team} xreception", marker='x', s=200)
 
-# Add arrows from xreception to xend
-for i in range(len(team_data)):
+
+# Add arrows from xreception to xend for pass
+if play_type_choice == 'pass' and yards_after_catch > 0.0:
+    for i in range(len(team_data)):
+        plt.arrow(
+            team_data['xreception'].iloc[i],
+            26.65,
+            team_data['xend'].iloc[i] - team_data['xreception'].iloc[i],  # Arrow length in x direction
+            0,  # Arrow length in y direction (0 since we're on a constant y-level)
+            head_width=2,  # Width of the arrow head
+            head_length=3,  # Length of the arrow head
+            width=1, #thickness of arrow
+            fc='orange',  # Fill color for the arrow head
+            ec='orange'   # Edge color for the arrow head
+        )
+elif play_type_choice == 'run':
+ for i in range(len(team_data)):
     plt.arrow(
-        team_data['xreception'].iloc[i],
+        team_data['yardline_100'].iloc[i],  # Start at 'yardline_100' instead of 'xend_rush'
         26.65,
-        team_data['xend'].iloc[i] - team_data['xreception'].iloc[i],  # Arrow length in x direction
+        team_data['xend_rush'].iloc[i] - team_data['yardline_100'].iloc[i],  # Arrow length in the opposite direction
         0,  # Arrow length in y direction (0 since we're on a constant y-level)
-        head_width=0.5,  # Width of the arrow head
-        head_length=0.5,  # Length of the arrow head
+        head_width=2,  # Width of the arrow head
+        head_length=3,  # Length of the arrow head
+        width=1, #thickness of arrow
         fc='orange',  # Fill color for the arrow head
         ec='orange'   # Edge color for the arrow head
     )
 
+
 wrapped_desc = textwrap.fill(desc, width=40)
 
 # Set the title
-plt.title(
-    f"{away_team} at {home_team} on {game_date}\n"
-    f"{passer_choice} to {receiver}\n"
-    f"Down: {down} - Yards to Go: {ydstogo}\n\n\n" 
-    f"{wrapped_desc}", 
-    fontsize=24
-)
+
+if play_type_choice == 'run':
+    currenttitle = (
+        f"{away_team} at {home_team} on {game_date}\n"
+        f"Rusher: {currentplayer}\n"
+        f"Down: {down} - Yards to Go: {ydstogo}\n\n\n"
+        f"{wrapped_desc}"
+    )
+elif play_type_choice == 'pass':
+    currenttitle = (
+        f"{away_team} at {home_team} on {game_date}\n"
+        f"{currentplayer} to {receiver}\n"
+        f"Down: {down} - Yards to Go: {ydstogo}\n\n\n"
+        f"{wrapped_desc}"
+    )
+
+# Set the title for the plot
+plt.title(currenttitle, fontsize=24)
+
 
 
 # Display the figure in Streamlit
-st.pyplot(fig)
+st.pyplot(fig, use_container_width=True)
