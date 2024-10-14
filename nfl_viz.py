@@ -30,7 +30,7 @@ df['xend_rush'] = df['yardline_100'] + df['rushing_yards']
 
 
 #filter and show data
-df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchdown'] == 1.0) & (df['rusher'] <> 'None')]
+df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchdown'] == 1.0) & (df['rusher'] != 'None')]
 
 #streamlit filters
 play_type = df['play_type'].drop_duplicates()
