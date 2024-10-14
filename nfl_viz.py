@@ -183,11 +183,11 @@ fig, ax = create_football_field(
 )
 
 # Create the scatter plot for xpass
-plt.scatter(team_data['yardline_100'], np.full(len(team_data), 26.65), label=f"{team} yardline_100", marker='o', s=200)
+plt.scatter(team_data['yardline_100'], np.full(len(team_data), 26.65), label=f"{team} yardline_100", marker='o', s=400)
 
 # Create the scatter plot for xreception
 if play_type_choice == 'pass':
-    plt.scatter(team_data['xreception'], np.full(len(team_data), 26.65), label=f"{team} xreception", marker='x', s=200)
+    plt.scatter(team_data['xreception'], np.full(len(team_data), 26.65), label=f"{team} xreception", marker='x', s=400)
 
 
 # Add arrows from xreception to xend for pass
@@ -200,7 +200,7 @@ if play_type_choice == 'pass' and yards_after_catch > 0.0:
             0,  # Arrow length in y direction (0 since we're on a constant y-level)
             head_width=2,  # Width of the arrow head
             head_length=3,  # Length of the arrow head
-            width=1, #thickness of arrow
+            width=0.7, #thickness of arrow
             fc='orange',  # Fill color for the arrow head
             ec='orange'   # Edge color for the arrow head
         )
