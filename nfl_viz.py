@@ -232,14 +232,14 @@ if play_type_choice == 'run':
     currenttitle = (
         f"{away_team} at {home_team} on {game_date}\n"
         f"Rusher: {currentplayer}\n"
-        f"Down: {down} - Yards to Go: {ydstogo}\n\n\n"
+        f"Down: {down} - Yards to Go: {ydstogo}\n\n"
         f"{wrapped_desc}"
     )
 elif play_type_choice == 'pass':
     currenttitle = (
         f"{away_team} at {home_team} on {game_date}\n"
         f"{currentplayer} to {receiver}\n"
-        f"Down: {down} - Yards to Go: {ydstogo}\n\n\n"
+        f"Down: {down} - Yards to Go: {ydstogo}\n\n"
         f"{wrapped_desc}"
     )
 
