@@ -245,7 +245,7 @@ elif play_type_choice == 'pass':
 plt.title(currenttitle, fontsize=24)
 
 st.markdown(
-    f"""<p style="font-size:16px;">{wrapped_desc}</p>""", 
+    f"""<p style="font-size:12px;">{wrapped_desc}</p>""", 
     unsafe_allow_html=True
 )
 
