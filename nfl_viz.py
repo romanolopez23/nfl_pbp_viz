@@ -13,6 +13,10 @@ import numpy as np
 import textwrap
 import nfl_data_py as nfl
 
+logo_path = "nfl_logo.png"
+# Add NFL logo at the top left
+st.image(logo_path, width=100)
+
 #import data
 #pbp = nfl.import_pbp_data([2024])
 pbp = nfl.import_pbp_data([2024], downcast=True, cache=False, alt_path=None)
