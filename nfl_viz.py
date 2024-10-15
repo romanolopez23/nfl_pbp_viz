@@ -30,7 +30,7 @@ df['xend_rush'] = df['yardline_100'] + df['rushing_yards']
 
 
 #filter and show data
-df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchdown'] == 1.0) & (df['rusher'] != None)]
+df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchdown'] == 1.0)]
 
 #streamlit filters
 play_type = df['play_type'].drop_duplicates()
@@ -44,10 +44,10 @@ team_choice = st.sidebar.selectbox(
 df = df[(df['posteam'] == team_choice)]
 
 if play_type_choice == 'run':
-    rusher = df['rusher'].drop_duplicates()
+    rusher = df['rusher_player_name'].drop_duplicates()
     rusher_choice = st.sidebar.selectbox(
-        'Choose Rusher:', options=rusher)
-    df = df[(df['rusher'] == rusher_choice)]
+        'Choose Rusher:', options=rusher_player_name)
+    df = df[(df['rusher_player_name'] == rusher_choice)]
     currentplayer = rusher_choice
 elif play_type_choice == 'pass':
     passer = df['passer'].drop_duplicates()
