@@ -13,6 +13,10 @@ import numpy as np
 import textwrap
 import nfl_data_py as nfl
 
+logo_path = "nfl_logo.png"
+# Add NFL logo at the top left
+st.image(logo_path, width=100)
+
 #import data
 #pbp = nfl.import_pbp_data([2024])
 pbp = nfl.import_pbp_data([2024], downcast=True, cache=False, alt_path=None)
@@ -242,11 +246,10 @@ elif play_type_choice == 'pass':
 # Set the title for the plot
 plt.title(currenttitle, fontsize=24)
 
-
-
 # Display the figure in Streamlit
 st.pyplot(fig, use_container_width=True)
 
-logo_path = "nfl_logo.png"
-# Add NFL logo at the top left
-st.image(logo_path, width=100)
+st.markdown(
+    f"""<p style="font-size:12px;">{wrapped_desc}</p>""", 
+    unsafe_allow_html=True
+)
