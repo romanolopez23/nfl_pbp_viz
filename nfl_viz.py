@@ -233,23 +233,21 @@ if play_type_choice == 'run':
         f"{away_team} at {home_team} on {game_date}\n"
         f"Rusher: {currentplayer}\n"
         f"Down: {down} - Yards to Go: {ydstogo}\n\n"
-        f"{wrapped_desc}"
     )
 elif play_type_choice == 'pass':
     currenttitle = (
         f"{away_team} at {home_team} on {game_date}\n"
         f"{currentplayer} to {receiver}\n"
         f"Down: {down} - Yards to Go: {ydstogo}\n\n"
-        f"{wrapped_desc}"
     )
 
 # Set the title for the plot
 plt.title(currenttitle, fontsize=24)
 
-# Display the figure in Streamlit
-st.pyplot(fig, use_container_width=True)
-
 st.markdown(
-    f"""<p style="font-size:12px;">{wrapped_desc}</p>""", 
+    f"""<p style="font-size:16px;">{wrapped_desc}</p>""", 
     unsafe_allow_html=True
 )
+
+# Display the figure in Streamlit
+st.pyplot(fig, use_container_width=True)
