@@ -46,7 +46,7 @@ df = df[(df['posteam'] == team_choice)]
 if play_type_choice == 'run':
     rusher = df['rusher_player_name'].drop_duplicates()
     rusher_choice = st.sidebar.selectbox(
-        'Choose Rusher:', options=rusher_player_name)
+        'Choose Rusher:', options=rusher)
     df = df[(df['rusher_player_name'] == rusher_choice)]
     currentplayer = rusher_choice
 elif play_type_choice == 'pass':
