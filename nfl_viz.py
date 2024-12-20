@@ -39,7 +39,7 @@ df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchd
 #streamlit filters
 play_type = df['play_type'].drop_duplicates()
 play_type_choice = st.sidebar.selectbox(
-    'Choose Play Typee:', options=play_type)
+    'Choose Play Type:', options=play_type)
 df = df[(df['play_type'] == play_type_choice)]
 
 team = df['posteam'].drop_duplicates()
