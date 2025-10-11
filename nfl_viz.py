@@ -37,6 +37,12 @@ df['xend_rush'] = df['yardline_100'] + df['rushing_yards']
 df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchdown'] == 1.0)]
 
 #streamlit filters
+season = df['season'].drop_duplicates()
+season_choice = st.sidebar.selectbox(
+    'Choose Season:', options=season)
+df = df[(df['season'] == season_choice)]
+
+
 play_type = df['play_type'].drop_duplicates()
 play_type_choice = st.sidebar.selectbox(
     'Choose Play Type:', options=play_type)
@@ -47,10 +53,7 @@ team_choice = st.sidebar.selectbox(
     'Choose Team:', options=team)
 df = df[(df['posteam'] == team_choice)]
 
-season = df['season'].drop_duplicates()
-season_choice = st.sidebar.selectbox(
-    'Choose Season:', options=season)
-df = df[(df['season'] == season_choice)]
+
 
 if play_type_choice == 'run':
     rusher = df['rusher_player_name'].drop_duplicates()
