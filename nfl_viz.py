@@ -237,8 +237,8 @@ elif play_type_choice == 'pass' and interception == 1.0:
         plt.arrow(
             team_data['xreception'].iloc[i],
             26.65,
-            team_data['return_yards'].iloc[i],  # Arrow length in x direction
-            1,  # Arrow length in y direction (0 since we're on a constant y-level)
+            -team_data['return_yards'].iloc[i],  # Arrow length in x direction
+            0,  # Arrow length in y direction (0 since we're on a constant y-level)
             head_width=2,  # Width of the arrow head
             head_length=3,  # Length of the arrow head
             width=0.7, #thickness of arrow
