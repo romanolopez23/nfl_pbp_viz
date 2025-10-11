@@ -259,13 +259,6 @@ if play_type_choice == 'run':
         f"Down: {down} - Yards to Go: {ydstogo}\n\n"
         f"{wrapped_desc}"
     )
-elif play_type_choice == 'pass' & interception == 0.0:
-    currenttitle = (
-        f"{away_team} at {home_team} on {game_date}\n"
-        f"{currentplayer} to {receiver}\n"
-        f"Down: {down} - Yards to Go: {ydstogo}\n\n"
-        f"{wrapped_desc}"
-    )
 elif play_type_choice == 'pass' & interception == 1.0:
     currenttitle = (
         f"{away_team} at {home_team} on {game_date}\n"
@@ -273,6 +266,14 @@ elif play_type_choice == 'pass' & interception == 1.0:
         f"Down: {down} - Yards to Go: {ydstogo} - {return_yards} pick 6.\n\n"
         f"{wrapped_desc}"
     )
+elif play_type_choice == 'pass':
+    currenttitle = (
+        f"{away_team} at {home_team} on {game_date}\n"
+        f"{currentplayer} to {receiver}\n"
+        f"Down: {down} - Yards to Go: {ydstogo}\n\n"
+        f"{wrapped_desc}"
+    )
+
 
 # Set the title for the plot
 plt.title(currenttitle, fontsize=24)
