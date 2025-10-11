@@ -86,7 +86,7 @@ df = df[(df['play_id'] == play_id_choice)]
 df = df[['game_id', 'play_id', 'play_type', 'home_team', 'away_team', 'game_date', \
         'receiver', 'rusher' ,'passer', 'ydstogo', 'down', 'posteam', 'yardline_100', \
         'xreception', 'xend', 'desc', 'yards_gained', 'air_yards', 'yards_after_catch',\
-        'xend_rush']]
+        'xend_rush', 'interception', 'return_yards']]
 
 # Assign variables
 home_team = df['home_team'].iloc[0]
@@ -99,6 +99,8 @@ down = df['down'].iloc[0]
 xend = df['xend'].iloc[0]
 xreception = df['xreception'].iloc[0]
 yards_after_catch = df['yards_after_catch'].iloc[0]
+interception = df['interception'].iloc[0]
+return_yards = df['return_yards'].iloc[0]
 
 
 def create_football_field(linenumbers=True,
@@ -230,6 +232,19 @@ elif play_type_choice == 'run':
         fc='orange',  # Fill color for the arrow head
         ec='orange'   # Edge color for the arrow head
     )
+elif play_type_choice == 'pass' and interception = 1.0:
+    for i in range(len(team_data)):
+        plt.arrow(
+            team_data['xreception'].iloc[i],
+            26.65,
+            team_data['xend'].iloc[i] - team_data['xreception'].iloc[i],  # Arrow length in x direction
+            1,  # Arrow length in y direction (0 since we're on a constant y-level)
+            head_width=2,  # Width of the arrow head
+            head_length=3,  # Length of the arrow head
+            width=0.7, #thickness of arrow
+            fc='orange',  # Fill color for the arrow head
+            ec='orange'   # Edge color for the arrow head
+        )
 
 
 wrapped_desc = textwrap.fill(desc, width=40)
