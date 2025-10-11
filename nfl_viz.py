@@ -32,9 +32,17 @@ df['xend'] = df['yardline_100'] + df['air_yards'] + df['yards_after_catch']
 # Calculate xend_rush
 df['xend_rush'] = df['yardline_100'] + df['rushing_yards']
 
+# rename play_type for intercepted TD passes
+df.loc[
+    (df['play_type'] == 'pass') &
+    (df['touchdown'] == 1.0) &
+    (df['interception'] == 1),
+    'play_type'
+] = 'pass intercepted'
+
 
 #filter and show data
-df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass')) & (df['touchdown'] == 1.0)]
+df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass') | (df['play_type'] == 'pass intercepted')) & (df['touchdown'] == 1.0)]
 
 #streamlit filters
 season = df['season'].drop_duplicates()
@@ -61,7 +69,7 @@ if play_type_choice == 'run':
         'Choose Rusher:', options=rusher)
     df = df[(df['rusher_player_name'] == rusher_choice)]
     currentplayer = rusher_choice
-elif play_type_choice == 'pass':
+elif play_type_choice == 'pass' or play_type_choice == 'pass intercepted':
     passer = df['passer'].drop_duplicates()
     passer_choice = st.sidebar.selectbox(
         'Choose Passer:', options=passer)
@@ -233,7 +241,7 @@ elif play_type_choice == 'run':
         fc='orange',  # Fill color for the arrow head
         ec='orange'   # Edge color for the arrow head
     )
-elif play_type_choice == 'pass' and interception == 1.0:
+elif play_type_choice == 'pass intercepted' and interception == 1.0:
     for i in range(len(team_data)):
         plt.arrow(
             team_data['xreception'].iloc[i],
@@ -259,7 +267,7 @@ if play_type_choice == 'run':
         f"Down: {down} - Yards to Go: {ydstogo}\n\n"
         f"{wrapped_desc}"
     )
-elif play_type_choice == 'pass' and interception ==1.0:
+elif play_type_choice == 'pass intercepted' and interception ==1.0:
     currenttitle = (
         f"{away_team} at {home_team} on {game_date}\n"
         f"{currentplayer} Intercepted by {interception_player_name}\n"
