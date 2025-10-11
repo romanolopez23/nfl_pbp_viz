@@ -19,7 +19,7 @@ st.image(logo_path, width=100)
 
 #import data
 #pbp = nfl.import_pbp_data([2024])
-pbp = nfl.import_pbp_data([2024], downcast=True, cache=False, alt_path=None)
+pbp = nfl.import_pbp_data([2024, 2025], downcast=True, cache=False, alt_path=None)
 #create df
 df = pd.DataFrame(pbp)
 
