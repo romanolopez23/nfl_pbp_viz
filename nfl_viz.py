@@ -259,7 +259,7 @@ if play_type_choice == 'run':
         f"Down: {down} - Yards to Go: {ydstogo}\n\n"
         f"{wrapped_desc}"
     )
-elif play_type_choice == 'pass':
+elif play_type_choice == 'pass' & interception <> 1.0:
     currenttitle = (
         f"{away_team} at {home_team} on {game_date}\n"
         f"{currentplayer} to {receiver}\n"
