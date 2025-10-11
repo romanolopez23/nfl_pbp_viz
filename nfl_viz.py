@@ -86,7 +86,7 @@ df = df[(df['play_id'] == play_id_choice)]
 df = df[['game_id', 'play_id', 'play_type', 'home_team', 'away_team', 'game_date', \
         'receiver', 'rusher' ,'passer', 'ydstogo', 'down', 'posteam', 'yardline_100', \
         'xreception', 'xend', 'desc', 'yards_gained', 'air_yards', 'yards_after_catch',\
-        'xend_rush', 'interception', 'return_yards']]
+        'xend_rush', 'interception', 'return_yards', 'interception_player_name']]
 
 # Assign variables
 home_team = df['home_team'].iloc[0]
@@ -101,6 +101,7 @@ xreception = df['xreception'].iloc[0]
 yards_after_catch = df['yards_after_catch'].iloc[0]
 interception = df['interception'].iloc[0]
 return_yards = df['return_yards'].iloc[0]
+interception_player_name = df['interception_player_name'].iloc[0]
 
 
 def create_football_field(linenumbers=True,
@@ -263,6 +264,13 @@ elif play_type_choice == 'pass':
         f"{away_team} at {home_team} on {game_date}\n"
         f"{currentplayer} to {receiver}\n"
         f"Down: {down} - Yards to Go: {ydstogo}\n\n"
+        f"{wrapped_desc}"
+    )
+elif play_type_choice == 'pass' & interception == 1.0:
+    currenttitle = (
+        f"{away_team} at {home_team} on {game_date}\n"
+        f"{currentplayer} Intercepted by {interception_player_name}\n"
+        f"Down: {down} - Yards to Go: {ydstogo} - {return_yards} pick 6.\n\n"
         f"{wrapped_desc}"
     )
 
