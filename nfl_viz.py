@@ -47,6 +47,11 @@ team_choice = st.sidebar.selectbox(
     'Choose Team:', options=team)
 df = df[(df['posteam'] == team_choice)]
 
+year = df['year'].drop_duplicates()
+year_choice = st.sidebar.selectbox(
+    'Choose Year:', options=team)
+df = df[(df['year'] == year_choice)]
+
 if play_type_choice == 'run':
     rusher = df['rusher_player_name'].drop_duplicates()
     rusher_choice = st.sidebar.selectbox(
