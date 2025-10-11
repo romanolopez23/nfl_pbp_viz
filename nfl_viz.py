@@ -232,7 +232,7 @@ elif play_type_choice == 'run':
         fc='orange',  # Fill color for the arrow head
         ec='orange'   # Edge color for the arrow head
     )
-elif play_type_choice == 'pass' and interception = 1.0:
+elif play_type_choice == 'pass' and interception == 1.0:
     for i in range(len(team_data)):
         plt.arrow(
             team_data['xreception'].iloc[i],
