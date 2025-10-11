@@ -251,8 +251,8 @@ elif play_type_choice == 'pass intercepted' and interception == 1.0:
             head_width=2,  # Width of the arrow head
             head_length=3,  # Length of the arrow head
             width=0.7, #thickness of arrow
-            fc='orange',  # Fill color for the arrow head
-            ec='orange'   # Edge color for the arrow head
+            fc='red',  # Fill color for the arrow head
+            ec='red'   # Edge color for the arrow head
         )
 
 
@@ -271,7 +271,7 @@ elif play_type_choice == 'pass intercepted' and interception ==1.0:
     currenttitle = (
         f"{away_team} at {home_team} on {game_date}\n"
         f"{currentplayer} Intercepted by {interception_player_name}\n"
-        f"Down: {down} - Yards to Go: {ydstogo} - {return_yards} pick 6.\n\n"
+        f"Down: {down} - Yards to Go: {ydstogo}\n\n"
         f"{wrapped_desc}"
     )
 elif play_type_choice == 'pass':
