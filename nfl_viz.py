@@ -49,7 +49,7 @@ df = df[(df['posteam'] == team_choice)]
 
 year = df['year'].drop_duplicates()
 year_choice = st.sidebar.selectbox(
-    'Choose Year:', options=team)
+    'Choose Year:', options=year)
 df = df[(df['year'] == year_choice)]
 
 if play_type_choice == 'run':
