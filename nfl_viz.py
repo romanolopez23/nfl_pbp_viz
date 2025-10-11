@@ -215,7 +215,7 @@ if play_type_choice == 'pass':
 
 # Create the scatter plot for interception
 if play_type_choice == 'pass intercepted':
-    plt.scatter(team_data['xreception'], np.full(len(team_data), 26.65), label=f"{team} xreception", marker='x', s=400, color ='red')
+    plt.scatter(team_data['xreception'], np.full(len(team_data), 26.65), label=f"{team} xreception", marker='x', s=400, color ='purple')
 
 
 # Add arrows from xreception to xend for pass
@@ -255,8 +255,8 @@ elif play_type_choice == 'pass intercepted' and interception == 1.0:
             head_width=2,  # Width of the arrow head
             head_length=3,  # Length of the arrow head
             width=0.7, #thickness of arrow
-            fc='red',  # Fill color for the arrow head
-            ec='red'   # Edge color for the arrow head
+            fc='purple',  # Fill color for the arrow head
+            ec='purple'   # Edge color for the arrow head
         )
 
 
