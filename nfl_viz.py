@@ -52,12 +52,12 @@ season_choice = st.sidebar.selectbox(
 df = df[(df['season'] == season_choice)]
 
 
-play_type = df['play_type'].drop_duplicates()
+play_type = sorted(df['play_type'].drop_duplicates())
 play_type_choice = st.sidebar.selectbox(
     'Choose Play Type:', options=play_type)
 df = df[(df['play_type'] == play_type_choice)]
 
-team = df['posteam'].drop_duplicates()
+team = sorted(df['posteam'].drop_duplicates())
 team_choice = st.sidebar.selectbox(
     'Choose Team:', options=team)
 df = df[(df['posteam'] == team_choice)]
