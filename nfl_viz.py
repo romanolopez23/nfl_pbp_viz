@@ -15,7 +15,7 @@ import nfl_data_py as nfl
 
 logo_path = "nfl_logo.png"
 # Add NFL logo at the top left
-st.sidebar.image(logo_path, use_container_width=True)
+st.sidebar.image(logo_path, width=80)
 
 
 #import data
