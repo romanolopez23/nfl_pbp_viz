@@ -15,7 +15,8 @@ import nfl_data_py as nfl
 
 logo_path = "nfl_logo.png"
 # Add NFL logo at the top left
-st.image(logo_path, width=100)
+st.sidebar.image(logo_path, use_column_width=True)
+
 
 #import data
 #pbp = nfl.import_pbp_data([2024])
