@@ -46,7 +46,7 @@ df.loc[
 df = df[((df['play_type'] == 'run') | (df['play_type'] == 'pass') | (df['play_type'] == 'pass intercepted')) & (df['touchdown'] == 1.0)]
 
 #streamlit filters
-season = sorted(df['season'].drop_duplicates(), reverse = true)
+season = sorted(df['season'].drop_duplicates(), reverse=True)
 season_choice = st.sidebar.selectbox(
     'Choose Season:', options=season)
 df = df[(df['season'] == season_choice)]
