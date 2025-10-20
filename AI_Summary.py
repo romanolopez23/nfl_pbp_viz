@@ -160,20 +160,27 @@ def generate_game_summary(row):
         return f"Error generating summary: {str(e)}"
 
 # --- Game selection ---
-st.sidebar.subheader("🏈 Select a Game to Generate AI Summary")
+st.sidebar.subheader("🏈 Select a Game")
 game_ids = sorted(week_data["game_id"].unique())
 selected_game_id = st.sidebar.selectbox("Choose Game:", game_ids)
 
-game_row = get_game_row(selected_game_id)
-if game_row:
-    st.subheader(f"🏈 AI Summary: {game_row['away_team']} at {game_row['home_team']}")
-    with st.spinner("AI is typing..."):
-        summary = generate_game_summary(game_row)
-        placeholder = st.empty()
-        displayed = ""
-        for char in summary:
-            displayed += char
-            placeholder.markdown(displayed)
-            time.sleep(0.015)
-else:
-    st.warning("Game data incomplete.")
+# --- Generate Summary Button ---
+generate_button = st.button("🧠 Generate AI Summary")
+
+# Placeholder for summary output
+summary_placeholder = st.empty()
+
+# Clear previous output when button clicked
+if generate_button:
+    summary_placeholder.empty()
+    game_row = get_game_row(selected_game_id)
+    if game_row:
+        with st.spinner("AI is typing..."):
+            summary = generate_game_summary(game_row)
+            displayed = ""
+            for char in summary:
+                displayed += char
+                summary_placeholder.markdown(displayed)
+                time.sleep(0.015)
+    else:
+        summary_placeholder.warning("Game data incomplete.")
