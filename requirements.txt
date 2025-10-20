@@ -1,5 +1,6 @@
 matplotlib
-nfl_data_py
 streamlit
 pandas
-google-generativeai
+nfl_data_py
+google-genai
+
