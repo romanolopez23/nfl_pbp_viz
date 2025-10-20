@@ -1,6 +1,6 @@
 matplotlib
 streamlit
 pandas
-nfl_data_py
+nfl_data_py==0.3.3
 google-genai
 
