@@ -4,7 +4,6 @@ import pandas as pd
 import google.genai as genai
 from google.genai import types
 import re
-import time
 
 # --- Helper to remove emojis or non-ASCII characters ---
 def clean_text(text):
@@ -72,10 +71,10 @@ week_data["pass_incomplete"] = (
 
 # --- Calculate pass yards ---
 week_data["pass_yards"] = week_data["yards_gained"].where(
-    (week_data["pass"] == 1) &
-    (week_data["sack"] != 1) &
-    (week_data["play_type"] != "no_play") &
-    (week_data["pass_attempts"] == 1),
+    (week_data["pass"] == 1)
+    & (week_data["sack"] != 1)
+    & (week_data["play_type"] != "no_play")
+    & (week_data["pass_attempts"] == 1),
     0
 )
 
@@ -122,36 +121,22 @@ def get_game_row(game_id):
         "game_stadium": home["game_stadium"],
         "home_team": home["home_team"],
         "away_team": away["away_team"],
-        "home_total_plays": home["total_plays"],
         "home_total_yards": home["total_yards"],
-        "home_pass_plays": home["pass_plays"],
-        "home_rush_plays": home["rush_plays"],
-        "away_total_plays": away["total_plays"],
         "away_total_yards": away["total_yards"],
-        "away_pass_plays": away["pass_plays"],
-        "away_rush_plays": away["rush_plays"],
         "total_home_score": home["total_home_score"],
         "total_away_score": away["total_away_score"],
-        "home_interceptions": home["interceptions"],
-        "away_interceptions": away["interceptions"],
-        "home_fourth_down_converted": home["fourth_down_converted"],
-        "away_fourth_down_converted": away["fourth_down_converted"],
-        "home_fourth_down_failed": home["fourth_down_failed"],
-        "away_fourth_down_failed": away["fourth_down_failed"],
         "home_sacks": home["sacks"],
-        "away_sacks": away["sacks"],
-        "home_incomplete_passes": home["incomplete_passes"],
-        "away_incomplete_passes": away["incomplete_passes"]
+        "away_sacks": away["sacks"]
     }
 
-# --- AI Summary Generator ---
-def generate_game_summary(row):
+# --- Cached AI Summary Function ---
+@st.cache_data(show_spinner=False)
+def generate_game_summary_cached(model_name, game_row):
     prompt = f"""
-    Write a short NFL game summary (4-5 sentences) for {row['away_team']} vs {row['home_team']}.
-    Include the final score ({row['away_team']} {row['total_away_score']} - {row['home_team']} {row['total_home_score']}).
-    Provide key offensive and defensive stats for both teams.
-    Stadium: {row['game_stadium']}.
-    Make it funny, but no emojis. If Los Angeles Chargers are involved, roast Jim Harbaugh.
+    Write a short NFL game summary (4-5 sentences) for {game_row['away_team']} vs {game_row['home_team']}.
+    Final score: {game_row['away_team']} {game_row['total_away_score']} - {game_row['home_team']} {game_row['total_home_score']}.
+    Mention yards, sacks, and stadium ({game_row['game_stadium']}). 
+    Make it concise, funny, and natural. If the Chargers are involved, roast Jim Harbaugh.
     """
     try:
         response = client.models.generate_content(model=model_name, contents=prompt)
@@ -167,20 +152,16 @@ selected_game_id = st.sidebar.selectbox("Choose Game:", game_ids)
 # --- Generate Summary Button ---
 generate_button = st.button("🧠 Generate AI Summary")
 
-# Placeholder for summary output
+# Placeholder for summary
 summary_placeholder = st.empty()
 
-# Clear previous output when button clicked
+# --- Handle click ---
 if generate_button:
     summary_placeholder.empty()
     game_row = get_game_row(selected_game_id)
     if game_row:
-        with st.spinner("AI is typing..."):
-            summary = generate_game_summary(game_row)
-            displayed = ""
-            for char in summary:
-                displayed += char
-                summary_placeholder.markdown(displayed)
-                time.sleep(0.015)
+        with st.spinner("Generating summary..."):
+            summary = generate_game_summary_cached(model_name, game_row)
+        summary_placeholder.markdown(summary)
     else:
         summary_placeholder.warning("Game data incomplete.")
