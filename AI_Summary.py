@@ -4,6 +4,7 @@ import pandas as pd
 import google.genai as genai
 from google.genai import types
 import re
+import time
 
 # --- Helper to remove emojis or non-ASCII characters ---
 def clean_text(text):
@@ -189,6 +190,18 @@ with st.sidebar.subheader("🏈 Select a Game to Generate AI Summary"):
 game_row = get_game_row(selected_game_id)
 if game_row:
     st.subheader(f"🏈 AI Summary: {game_row['away_team']} at {game_row['home_team']}")
-    st.write(generate_game_summary(game_row))
+
+    # --- Animate AI typing ---
+    with st.spinner("Generating AI summary..."):
+        summary = generate_game_summary(game_row)
+        placeholder = st.empty()
+        displayed_text = ""
+
+        # Simulated typing effect
+        for char in summary:
+            displayed_text += char
+            placeholder.markdown(displayed_text)
+            time.sleep(0.015)  # typing speed (seconds per character)
+
 else:
     st.warning("Game data is incomplete.")
