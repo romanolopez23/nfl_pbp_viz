@@ -169,6 +169,7 @@ def generate_game_summary(row):
     {row['away_incomplete_passes']} incomplete passes.
 
     Highlight which team dominated the passing or rushing game. Mention pass completion percentage. And the stadium name: {row['game_stadium']}.
+    Make it funny.
     Do not use emojis.
     """
     try:
