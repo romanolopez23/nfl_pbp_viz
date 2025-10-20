@@ -4,6 +4,7 @@ import pandas as pd
 import google.genai as genai
 from google.genai import types
 import re
+import time
 
 # --- Helper to remove emojis or non-ASCII characters ---
 def clean_text(text):
@@ -155,13 +156,17 @@ generate_button = st.button("🧠 Generate AI Summary")
 # Placeholder for summary
 summary_placeholder = st.empty()
 
-# --- Handle click ---
+# --- Handle click with typing effect ---
 if generate_button:
     summary_placeholder.empty()
     game_row = get_game_row(selected_game_id)
     if game_row:
-        with st.spinner("Generating summary..."):
+        with st.spinner("AI is typing..."):
             summary = generate_game_summary_cached(model_name, game_row)
-        summary_placeholder.markdown(summary)
+            displayed_text = ""
+            for char in summary:
+                displayed_text += char
+                summary_placeholder.markdown(displayed_text)
+                time.sleep(0.015)  # keep typing effect
     else:
         summary_placeholder.warning("Game data incomplete.")
