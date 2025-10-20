@@ -1,2 +1,5 @@
 matplotlib
 nfl_data_py
+streamlit
+pandas
+google-generativeai
