@@ -15,7 +15,7 @@ st.title("AI-Powered NFL Game Summary Generator (Google Gemini)")
 # --- Sidebar configuration ---
 with st.sidebar:
     st.header("Configuration")
-    api_key = st.text_input("Enter your Gemini API Key:", type="password")
+    api_key = st.secrets["GEMINI_API_KEY"]
     model_name = st.selectbox(
         "Select Model:",
         ["gemini-2.5-flash", "gemini-2.5-pro"],
