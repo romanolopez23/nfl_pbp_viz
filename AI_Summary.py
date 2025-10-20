@@ -11,7 +11,7 @@ def clean_text(text):
     return re.sub(r'[^\x00-\x7F]+', '', text)
 
 # --- Page title ---
-st.title("AI-Powered NFL Game Summary Generator (Google Gemini)")
+st.title("🏈 AI-Powered NFL Game Summary Generator (Google Gemini)")
 
 # --- Sidebar configuration ---
 with st.sidebar:
@@ -28,20 +28,25 @@ if not api_key:
     st.stop()
 
 client = genai.Client(api_key=api_key)
-
 season = 2025
-week = 1
 
+# --- Load entire season once ---
 @st.cache_data
-def load_week_data(season, week):
+def load_season_data(season):
     pbp = nfl.import_pbp_data([season], downcast=True, cache=False)
-    return pbp[pbp["week"] == week]
+    return pbp
 
-# --- Load Week 1 data ---
-week_data = load_week_data(season, week)
+pbp_data = load_season_data(season)
+
+# --- Sidebar: Select week ---
+available_weeks = sorted(pbp_data["week"].dropna().unique())
+selected_week = st.sidebar.selectbox("📅 Select Week:", available_weeks, index=0)
+
+# Filter data for selected week
+week_data = pbp_data[pbp_data["week"] == selected_week]
 
 if week_data.empty:
-    st.warning(f"No data found for Week {week} in {season}.")
+    st.warning(f"No data found for Week {selected_week} in {season}.")
     st.stop()
 
 # --- Calculate pass attempts ---
@@ -90,13 +95,12 @@ game_stats_per_team = (
         fourth_down_failed=("fourth_down_failed", "sum"),
         sacks=("sack", "sum"),
         incomplete_passes=("pass_incomplete", "sum")
-        #game_stadium=("game_stadium", "first")  # Preserve stadium name
     )
     .reset_index()
 )
 
 # --- Display game stats table ---
-st.subheader("📊 Game Stats Table (per team)")
+st.subheader(f"📊 Week {selected_week} Game Stats (Per Team)")
 st.dataframe(game_stats_per_team[[
     "game_id", "home_team", "away_team", "posteam",
     "total_plays", "total_yards", "pass_yards", "pass_plays", "incomplete_passes", "rush_plays",
@@ -104,11 +108,11 @@ st.dataframe(game_stats_per_team[[
     "fourth_down_failed", "sacks", "game_stadium"
 ]])
 
-# --- Prepare a single row per game with home/away stats ---
+# --- Prepare single row per game ---
 def get_game_row(game_id):
     game = game_stats_per_team[game_stats_per_team["game_id"] == game_id]
     if len(game) != 2:
-        return None  # Skip if data is incomplete
+        return None
 
     home = game[game["posteam"] == game.iloc[0]["home_team"]].iloc[0]
     away = game[game["posteam"] == game.iloc[0]["away_team"]].iloc[0]
@@ -140,68 +144,36 @@ def get_game_row(game_id):
         "away_incomplete_passes": away["incomplete_passes"]
     }
 
-# --- Generate enhanced AI summary ---
+# --- AI Summary Generator ---
 def generate_game_summary(row):
     prompt = f"""
     Write a short NFL game summary (4-5 sentences) for {row['away_team']} vs {row['home_team']}.
     Include the final score ({row['away_team']} {row['total_away_score']} - {row['home_team']} {row['total_home_score']}).
-    Provide key offensive and defensive stats for both teams:
-
-    {row['home_team']}: 
-    {row['home_total_plays']} total plays, 
-    {row['home_total_yards']} total yards, 
-    {row['home_pass_plays']} passing plays, 
-    {row['home_rush_plays']} rushing plays, 
-    {row['home_interceptions']} interceptions,
-    {row['home_fourth_down_converted']} fourth down converted,
-    {row['home_fourth_down_failed']} fourth down failed,
-    {row['home_sacks']} sacks,
-    {row['home_incomplete_passes']} incomplete passes.
-
-    {row['away_team']}: 
-    {row['away_total_plays']} total plays, 
-    {row['away_total_yards']} total yards, 
-    {row['away_pass_plays']} passing plays, 
-    {row['away_rush_plays']} rushing plays, 
-    {row['away_interceptions']} interceptions,
-    {row['away_fourth_down_converted']} fourth down converted,
-    {row['away_fourth_down_failed']} fourth down failed,
-    {row['away_sacks']} sacks,
-    {row['away_incomplete_passes']} incomplete passes.
-
-    Highlight which team dominated the passing or rushing game. Mention pass completion percentage. And the stadium name: {row['game_stadium']}.
-    Make it funny. If LAC (Los Angeles Chargers) is selected, make fun of Jim Harbaugh for cheating with Michigan.
-    Do not use emojis.
+    Provide key offensive and defensive stats for both teams.
+    Stadium: {row['game_stadium']}.
+    Make it funny, but no emojis. If Los Angeles Chargers are involved, roast Jim Harbaugh.
     """
     try:
-        response = client.models.generate_content(
-            model=model_name,
-            contents=prompt
-        )
+        response = client.models.generate_content(model=model_name, contents=prompt)
         return clean_text(response.text)
     except Exception as e:
         return f"Error generating summary: {str(e)}"
 
-# --- Game selection filter ---
-with st.sidebar.subheader("🏈 Select a Game to Generate AI Summary"):
-    game_ids = week_data["game_id"].unique()
-    selected_game_id = st.selectbox("Choose game_id:", game_ids)
+# --- Game selection ---
+st.sidebar.subheader("🏈 Select a Game to Generate AI Summary")
+game_ids = sorted(week_data["game_id"].unique())
+selected_game_id = st.sidebar.selectbox("Choose Game:", game_ids)
 
 game_row = get_game_row(selected_game_id)
 if game_row:
     st.subheader(f"🏈 AI Summary: {game_row['away_team']} at {game_row['home_team']}")
-
-    # --- Animate AI typing ---
-    with st.spinner("Generating AI summary..."):
+    with st.spinner("AI is typing..."):
         summary = generate_game_summary(game_row)
         placeholder = st.empty()
-        displayed_text = ""
-
-        # Simulated typing effect
+        displayed = ""
         for char in summary:
-            displayed_text += char
-            placeholder.markdown(displayed_text)
-            time.sleep(0.015)  # typing speed (seconds per character)
-
+            displayed += char
+            placeholder.markdown(displayed)
+            time.sleep(0.015)
 else:
-    st.warning("Game data is incomplete.")
+    st.warning("Game data incomplete.")
