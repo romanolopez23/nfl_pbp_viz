@@ -1,7 +1,7 @@
 import streamlit as st
 import nfl_data_py as nfl
 import pandas as pd
-from google import genai
+import google.genai as genai
 from google.genai import types
 import re
 
