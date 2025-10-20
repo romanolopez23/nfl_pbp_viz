@@ -170,7 +170,7 @@ def generate_game_summary(row):
     {row['away_incomplete_passes']} incomplete passes.
 
     Highlight which team dominated the passing or rushing game. Mention pass completion percentage. And the stadium name: {row['game_stadium']}.
-    Make it funny.
+    Make it funny. If LAC (Los Angeles Chargers) is selected, make fun of Jim Harbaugh for cheating with Michigan.
     Do not use emojis.
     """
     try:
