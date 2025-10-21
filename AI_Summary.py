@@ -11,7 +11,7 @@ def clean_text(text):
     return re.sub(r'[^\x00-\x7F]+', '', text)
 
 # --- Page title ---
-st.title("🏈 NFL Game AI Summary Generator")
+st.title("🏈 2025 NFL Season: AI-Powered Game Summaries")
 
 # --- Sidebar configuration ---
 with st.sidebar:
