@@ -11,7 +11,7 @@ def clean_text(text):
     return re.sub(r'[^\x00-\x7F]+', '', text)
 
 # --- Page title ---
-st.title("🏈 AI-Powered NFL Game Summary Generator (Google Gemini)")
+st.title("🏈 NFL Game AI Summary Generator")
 
 # --- Sidebar configuration ---
 with st.sidebar:
@@ -143,7 +143,7 @@ def generate_game_summary_cached(model_name, game_row):
     Write a short NFL game summary (4-5 sentences) for {game_row['away_team']} vs {game_row['home_team']}.
     Final score: {game_row['away_team']} {game_row['total_away_score']} - {game_row['home_team']} {game_row['total_home_score']}.
     Mention yards, sacks, and stadium ({game_row['game_stadium']}). 
-    Sound it like you are an Ohio State fan. If the Chargers (LAC) are involved, roast Jim Harbaugh about the game cheating scandals he had at Michigan.
+    If the Chargers (LAC) are involved, roast Jim Harbaugh about the game cheating scandals he had at Michigan.
     """
     try:
         response = client.models.generate_content(model=model_name, contents=prompt)
