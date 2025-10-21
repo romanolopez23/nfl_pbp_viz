@@ -140,7 +140,7 @@ def get_game_row(game_id):
 @st.cache_data(show_spinner=False)
 def generate_game_summary_cached(model_name, game_row):
     prompt = f"""
-       Write a short NFL game summary (4-5 sentences) for {row['away_team']} vs {row['home_team']}.
+    Write a short NFL game summary (4-5 sentences) for {row['away_team']} vs {row['home_team']}.
     Include the final score ({row['away_team']} {row['total_away_score']} - {row['home_team']} {row['total_home_score']}).
     Provide key offensive and defensive stats for both teams:
 
