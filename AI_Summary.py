@@ -128,12 +128,26 @@ def get_game_row(game_id):
         "game_stadium": home["game_stadium"],
         "home_team": home["home_team"],
         "away_team": away["away_team"],
+        "home_total_plays": home["total_plays"],
         "home_total_yards": home["total_yards"],
+        "home_pass_plays": home["pass_plays"],
+        "home_rush_plays": home["rush_plays"],
+        "away_total_plays": away["total_plays"],
         "away_total_yards": away["total_yards"],
+        "away_pass_plays": away["pass_plays"],
+        "away_rush_plays": away["rush_plays"],
         "total_home_score": home["total_home_score"],
         "total_away_score": away["total_away_score"],
+        "home_interceptions": home["interceptions"],
+        "away_interceptions": away["interceptions"],
+        "home_fourth_down_converted": home["fourth_down_converted"],
+        "away_fourth_down_converted": away["fourth_down_converted"],
+        "home_fourth_down_failed": home["fourth_down_failed"],
+        "away_fourth_down_failed": away["fourth_down_failed"],
         "home_sacks": home["sacks"],
-        "away_sacks": away["sacks"]
+        "away_sacks": away["sacks"],
+        "home_incomplete_passes": home["incomplete_passes"],
+        "away_incomplete_passes": away["incomplete_passes"]
     }
 
 # --- Cached AI Summary Function ---
