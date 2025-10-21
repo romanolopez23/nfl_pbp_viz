@@ -96,22 +96,22 @@ game_stats_per_team = (
 )
 
 # --- Toggle table visibility ---
-#if "show_table" not in st.session_state:
-   # st.session_state.show_table = True  # default is visible
+if "show_table" not in st.session_state:
+     st.session_state.show_table = True  # default is visible
 
-#toggle_table = st.button("📊 Show/Hide Game Stats Table")
-#if toggle_table:
-   # st.session_state.show_table = not st.session_state.show_table
+toggle_table = st.button("📊 Show/Hide Game Stats Table")
+if toggle_table:
+    st.session_state.show_table = not st.session_state.show_table
 
 # --- Display table only if flag is True ---
-#if st.session_state.show_table:
-   # st.subheader(f"📊 Week {selected_week} Game Stats (Per Team)")
-   # st.dataframe(game_stats_per_team[[
-     #   "game_id", "home_team", "away_team", "posteam",
-      #  "total_plays", "total_yards", "pass_yards", "pass_plays", "incomplete_passes", "rush_plays",
-       # "total_home_score", "total_away_score", "interceptions", "fourth_down_converted",
-       # "fourth_down_failed", "sacks", "game_stadium"
-   # ]])
+if st.session_state.show_table:
+    st.subheader(f"📊 Week {selected_week} Game Stats (Per Team)")
+    st.dataframe(game_stats_per_team[[
+        "game_id", "home_team", "away_team", "posteam",
+        "total_plays", "total_yards", "pass_yards", "pass_plays", "incomplete_passes", "rush_plays",
+        "total_home_score", "total_away_score", "interceptions", "fourth_down_converted",
+        "fourth_down_failed", "sacks", "game_stadium"
+    ]])
 
 
 # --- Prepare single row per game ---
