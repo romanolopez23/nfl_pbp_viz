@@ -154,33 +154,33 @@ def get_game_row(game_id):
 @st.cache_data(show_spinner=False)
 def generate_game_summary_cached(model_name, game_row):
     prompt = f"""
-    Write a short NFL game summary (4-5 sentences) for {row['away_team']} vs {row['home_team']}.
-    Include the final score ({row['away_team']} {row['total_away_score']} - {row['home_team']} {row['total_home_score']}).
+    Write a short NFL game summary (4-5 sentences) for {game_row['away_team']} vs {game_row['home_team']}.
+    Include the final score ({game_row['away_team']} {game_row['total_away_score']} - {game_row['home_team']} {game_row['total_home_score']}).
     Provide key offensive and defensive stats for both teams:
 
-    {row['home_team']}: 
-    {row['home_total_plays']} total plays, 
-    {row['home_total_yards']} total yards, 
-    {row['home_pass_plays']} passing plays, 
-    {row['home_rush_plays']} rushing plays, 
-    {row['home_interceptions']} interceptions,
-    {row['home_fourth_down_converted']} fourth down converted,
-    {row['home_fourth_down_failed']} fourth down failed,
-    {row['home_sacks']} sacks,
-    {row['home_incomplete_passes']} incomplete passes.
+    {game_row['home_team']}: 
+    {game_row['home_total_plays']} total plays, 
+    {game_row['home_total_yards']} total yards, 
+    {game_row['home_pass_plays']} passing plays, 
+    {game_row['home_rush_plays']} rushing plays, 
+    {game_row['home_interceptions']} interceptions,
+    {game_row['home_fourth_down_converted']} fourth down converted,
+    {game_row['home_fourth_down_failed']} fourth down failed,
+    {game_row['home_sacks']} sacks,
+    {game_row['home_incomplete_passes']} incomplete passes.
 
-    {row['away_team']}: 
-    {row['away_total_plays']} total plays, 
-    {row['away_total_yards']} total yards, 
-    {row['away_pass_plays']} passing plays, 
-    {row['away_rush_plays']} rushing plays, 
-    {row['away_interceptions']} interceptions,
-    {row['away_fourth_down_converted']} fourth down converted,
-    {row['away_fourth_down_failed']} fourth down failed,
-    {row['away_sacks']} sacks,
-    {row['away_incomplete_passes']} incomplete passes.
+    {game_row['away_team']}: 
+    {game_row['away_total_plays']} total plays, 
+    {game_row['away_total_yards']} total yards, 
+    {game_row['away_pass_plays']} passing plays, 
+    {game_row['away_rush_plays']} rushing plays, 
+    {game_row['away_interceptions']} interceptions,
+    {game_row['away_fourth_down_converted']} fourth down converted,
+    {game_row['away_fourth_down_failed']} fourth down failed,
+    {game_row['away_sacks']} sacks,
+    {game_row['away_incomplete_passes']} incomplete passes.
 
-    Highlight which team dominated the passing or rushing game. Mention pass completion percentage. And the stadium name: {row['game_stadium']}.
+    Highlight which team dominated the passing or rushing game. Mention pass completion percentage. And the stadium name: {game_row['game_stadium']}.
     Do not use emojis.
     If the Chargers (LAC) are involved, roast Jim Harbaugh about the game cheating scandals he had at Michigan.
     """
@@ -189,6 +189,7 @@ def generate_game_summary_cached(model_name, game_row):
         return clean_text(response.text)
     except Exception as e:
         return f"Error generating summary: {str(e)}"
+
 
 # --- Game selection ---
 game_ids = sorted(week_data["game_id"].unique())
