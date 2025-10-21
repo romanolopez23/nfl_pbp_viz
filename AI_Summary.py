@@ -181,7 +181,7 @@ def generate_game_summary_cached(model_name, game_row):
     {game_row['away_incomplete_passes']} incomplete passes.
 
     Highlight which team dominated the passing or rushing game. Mention pass completion percentage. And the stadium name: {game_row['game_stadium']}.
-    Do not use emojis.
+    Do not use emojis. Mention fourth down conversions if relevant.
     If the Chargers (LAC) are involved, roast Jim Harbaugh about the game cheating scandals he had at Michigan.
     """
     try:
