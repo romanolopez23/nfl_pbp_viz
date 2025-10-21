@@ -142,7 +142,7 @@ def generate_game_summary_cached(model_name, game_row):
     prompt = f"""
     Write a short NFL game summary (4-5 sentences) for {game_row['away_team']} vs {game_row['home_team']}.
     Final score: {game_row['away_team']} {game_row['total_away_score']} - {game_row['home_team']} {game_row['total_home_score']}.
-    Mention yards, sacks, and stadium ({game_row['game_stadium']}). 
+    Mention yards, sacks, interceptions, fourth downs and stadium ({game_row['game_stadium']}). 
     If the Chargers (LAC) are involved, roast Jim Harbaugh about the game cheating scandals he had at Michigan.
     """
     try:
