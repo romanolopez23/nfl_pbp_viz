@@ -18,14 +18,10 @@ with st.sidebar:
     st.header("Configuration")
     api_key = st.secrets["GEMINI_API_KEY"]
     model_name = st.selectbox(
-        "Select Model:",
+        "🤖 Select Model:",
         ["gemini-2.5-flash", "gemini-2.5-pro"],
         index=0
     )
-
-if not api_key:
-    st.warning("Please enter your Gemini API key in the sidebar.")
-    st.stop()
 
 client = genai.Client(api_key=api_key)
 season = 2025
@@ -156,9 +152,8 @@ def generate_game_summary_cached(model_name, game_row):
         return f"Error generating summary: {str(e)}"
 
 # --- Game selection ---
-st.sidebar.subheader("🏈 Select a Game")
 game_ids = sorted(week_data["game_id"].unique())
-selected_game_id = st.sidebar.selectbox("Choose Game:", game_ids)
+selected_game_id = st.sidebar.selectbox("🏈 Select a Game", game_ids)
 
 # --- Generate Summary Button ---
 generate_button = st.button("🧠 Generate AI Summary")
