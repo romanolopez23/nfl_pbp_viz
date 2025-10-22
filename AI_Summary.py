@@ -181,9 +181,9 @@ def generate_game_summary_cached(model_name, game_row):
     {game_row['away_incomplete_passes']} incomplete passes.
 
     Highlight which team dominated the passing or rushing game. Mention pass completion percentage. And the stadium name: {game_row['game_stadium']}.
-    Do not use emojis. Mention fourth down converted and fourth down failed. Don't mention total plays.
+    Mention fourth down converted and fourth down failed. Don't mention total plays.
     If the Chargers (LAC) are involved, roast Jim Harbaugh about the game cheating scandals he had at Michigan.
-    """
+    Do not use emojis. """
     try:
         response = client.models.generate_content(model=model_name, contents=prompt)
         return clean_text(response.text)
