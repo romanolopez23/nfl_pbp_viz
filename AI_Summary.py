@@ -159,7 +159,7 @@ def generate_game_summary_cached(model_name, game_row):
     Provide key offensive and defensive stats for both teams:
 
     {game_row['home_team']}: 
-    {game_row['home_total_plays']} total plays, 
+    #{game_row['home_total_plays']} total plays, 
     {game_row['home_total_yards']} total yards, 
     {game_row['home_pass_plays']} passing plays, 
     {game_row['home_rush_plays']} rushing plays, 
@@ -170,7 +170,7 @@ def generate_game_summary_cached(model_name, game_row):
     {game_row['home_incomplete_passes']} incomplete passes.
 
     {game_row['away_team']}: 
-    {game_row['away_total_plays']} total plays, 
+    #{game_row['away_total_plays']} total plays, 
     {game_row['away_total_yards']} total yards, 
     {game_row['away_pass_plays']} passing plays, 
     {game_row['away_rush_plays']} rushing plays, 
